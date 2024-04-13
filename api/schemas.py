@@ -2,20 +2,35 @@ from bson import ObjectId
 from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
 
+# class PyObjectId(ObjectId):
+#     @classmethod
+#     def __get_validators__(cls):
+#         yield cls.validate
+
+#     @classmethod
+#     def validate(cls, v):
+#         if not ObjectId.is_valid(v):
+#             raise ValueError("Invalid ObjectID")
+#         return ObjectId(v)
+
+#     @classmethod
+#     def __modify_schema__(cls, field_schema):
+#         field_schema.update(type="string")
+
 class PyObjectId(ObjectId):
     @classmethod
     def __get_validators__(cls):
         yield cls.validate
 
     @classmethod
-    def validate(cls, v):
-        if not ObjectId.is_valid(v):
-            raise ValueError("Invalid ObjectID")
-        return ObjectId(v)
+    def validate(cls, value, field):
+        if not ObjectId.is_valid(value):
+            raise ValueError('Invalid ObjectId')
+        return str(value)
 
     @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(type="string")
+    def __get_pydantic_field_info__(cls):
+        return {"type": "string"}
 
 class User(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
