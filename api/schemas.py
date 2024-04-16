@@ -33,7 +33,7 @@ class PyObjectId(ObjectId):
         return {"type": "string"}
 
 class User(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    # id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     email: EmailStr
     username: str
     first_name: str
@@ -60,7 +60,7 @@ class User(BaseModel):
         }
 
 class UserResponse(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    # id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     email: EmailStr
     username: str
     first_name: str
@@ -94,7 +94,7 @@ class CompletePasswordReset(BaseModel):
     new_password: str
 
 class PostContent(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    # id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     user_email: str = None
     post_owner: str = None
     title: str
@@ -116,7 +116,7 @@ class PostContent(BaseModel):
         }
 
 class PostContentResponse(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    # id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     user_email: str = None
     post_owner: str =None
     title: str
