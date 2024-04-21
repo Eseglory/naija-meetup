@@ -11,7 +11,7 @@ router = APIRouter(
 
 # @router.post("", status_code=status.HTTP_200_OK)
 # async def login(user_credentials: OAuth2PasswordRequestForm = Depends()):
-#     user = await utils.db["users"].find_one({"username": user_credentials.username})
+#     user = await utils.db["users"].find_one({"email": user_credentials.username})
 #     if user["is_email_verified"] == False:
 #         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You have not completed your registration process")
 
@@ -24,10 +24,10 @@ router = APIRouter(
 @router.post("", status_code=status.HTTP_200_OK)
 async def login(user_credentials: LoginRequest):
 
-    if not user_credentials.username or not user_credentials.password:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username and password are required")
+    if not user_credentials.email or not user_credentials.password:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="email and password are required")
 
-    user = await utils.db["users"].find_one({"username": user_credentials.username, "is_active": True})
+    user = await utils.db["users"].find_one({"email": user_credentials.email, "is_active": True})
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
@@ -44,7 +44,6 @@ async def login(user_credentials: LoginRequest):
               "token_type": "bearer",
               "user_details": {
                   "email": user["email"],
-                  "username": user["username"],
                   "first_name": user["first_name"],
                   "last_name": user["last_name"],
                   "registration_date": user["creation_date"] 

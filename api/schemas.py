@@ -35,7 +35,6 @@ class PyObjectId(ObjectId):
 class User(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     email: EmailStr
-    username: str
     first_name: str
     last_name: str
     profile_picture: str = None
@@ -51,7 +50,6 @@ class User(BaseModel):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "username": "sammy",
                 "first_name": "Samson",
                 "last_name": "John",
                 "email": "sammy@gmail.com",
@@ -62,7 +60,6 @@ class User(BaseModel):
 class UserResponse(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     email: EmailStr
-    username: str
     first_name: str
     last_name: str
 
@@ -71,7 +68,6 @@ class UserResponse(BaseModel):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "username": "sammy",
                 "first_name": "Samson",
                 "last_name": "John",
                 "email": "sammy@gmail.com"
@@ -138,6 +134,6 @@ class PostContentResponse(BaseModel):
         }
 
 class LoginRequest(BaseModel):
-    username: str
+    email: str
     password: str
 

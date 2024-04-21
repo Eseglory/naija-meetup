@@ -11,11 +11,7 @@ router = APIRouter(tags=["User Routes"])
 async def registration(user_info: User):
     user_info = jsonable_encoder(user_info)
 
-    username_found = await utils.db["users"].find_one({"username": user_info["username"]})
     email_found = await utils.db["users"].find_one({"email": user_info["email"]})
-    if username_found:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f"username {user_info["username"]} already taken.")
 
     if email_found:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
