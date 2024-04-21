@@ -7,7 +7,7 @@ from ..utilities import utils, send_email
 router = APIRouter(tags=["User Routes"])
 
 
-@router.post("/user-registration", response_description="Register a new user", response_model=UserResponse)
+@router.post("/user-registration", response_description="Register a new user")
 async def registration(user_info: User):
     user_info = jsonable_encoder(user_info)
 
@@ -24,11 +24,11 @@ async def registration(user_info: User):
     user_info["password"] = utils.get_password_hash(user_info["password"])
     user_info["apikey"] = secrets.token_hex(30)
     new_user = await utils.db["users"].insert_one(user_info)
-    created_user = await utils.db["users"].find_one({"_id": new_user.inserted_id})
+    # created_user = await utils.db["users"].find_one({"_id": new_user.inserted_id})
 
     otp = await utils.generate_and_insert_otp(user_info["email"])
     await send_email.send_otp_email(user_info["email"], otp, user_info["first_name"])
-    return created_user
+    return ({"message": "user was successfully created."})
 
 @router.post("/verify-user", response_description="Resend otp")
 async def registration(user_request: CompleteUserRegistration):

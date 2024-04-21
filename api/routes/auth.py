@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status, HTTPException, Body
 from fastapi.security import OAuth2PasswordRequestForm
-from ..utilities import utils
+from ..utilities import utils, send_email
 from ..oauth2 import create_access_token
 from ..schemas import LoginRequest
 
@@ -32,6 +32,8 @@ async def login(user_credentials: LoginRequest):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
     if user["is_email_verified"] == False:
+        otp = await utils.generate_and_insert_otp(user["email"])
+        await send_email.send_otp_email(user["email"], otp, user["first_name"])
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You have not completed your registration process")
 
     if user and utils.verify_password(user_credentials.password, user["password"]):
