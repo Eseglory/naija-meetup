@@ -95,7 +95,7 @@ class PostContent(BaseModel):
     post_owner: str = None
     title: str
     content: str
-    featured_image: str
+    media_url: str
     is_published: bool = True
     creation_date: datetime = Field(default_factory=datetime.now)
 
@@ -106,7 +106,7 @@ class PostContent(BaseModel):
             "example": {
                 "title": "It's a brigth day",
                 "content": "enter more details here",
-                "featured_image": "",
+                "media_url": "",
                 "is_published": True
             }
         }
@@ -117,7 +117,7 @@ class PostContentResponse(BaseModel):
     post_owner: str =None
     title: str
     content: str
-    featured_image: str
+    media_url: str
     is_published: bool = True
     creation_date: datetime = Field(default_factory=datetime.now)
 
@@ -128,7 +128,7 @@ class PostContentResponse(BaseModel):
             "example": {
                 "title": "It's a brigth day",
                 "content": "enter more details here",
-                "featured_image": "",
+                "media_url": "",
                 "is_published": True
             }
         }
