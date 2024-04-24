@@ -7,7 +7,7 @@ app = FastAPI()
 app.include_router(users.router)
 app.include_router(auth.router)
 app.include_router(password_reset.router)
-# app.include_router(post_content.router)
+app.include_router(post_content.router)
 
 if __name__ == "__main__":
     port = int(getenv("PORT, 8000"))
