@@ -29,10 +29,23 @@ async def create_post(post_content: PostContent, current_user = Depends(oauth2.g
             detail="Internal server error."
         )
     
+# @router.get("", response_description="Get post content", response_model=List[PostContentResponse])
+# async def get_posts(limit: int = 10, orderby: str = "creation_date"):
+#     try:
+#         post_content = await utils.db["post_contents"].find({"$query": {}, "$orderby": {orderby: -1}}).to_list(limit)
+#         return post_content
+
+#     except Exception as ex:
+#         raise HTTPException(
+#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+#             detail="Internal server error."
+#         )
+
 @router.get("", response_description="Get post content", response_model=List[PostContentResponse])
-async def get_posts(limit: int = 10, orderby: str = "creation_date"):
+async def get_posts(page: int = 1, page_size: int = 10, orderby: str = "creation_date"):
     try:
-        post_content = await utils.db["post_contents"].find({"$query": {}, "$orderby": {orderby: -1}}).to_list(limit)
+        skip = (page - 1) * page_size
+        post_content = await utils.db["post_contents"].find({"$query": {}, "$orderby": {orderby: -1}}).skip(skip).limit(page_size).to_list(None)
         return post_content
 
     except Exception as ex:

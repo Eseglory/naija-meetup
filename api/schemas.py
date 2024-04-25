@@ -31,6 +31,7 @@ class PyObjectId(ObjectId):
     @classmethod
     def __get_pydantic_field_info__(cls):
         return {"type": "string"}
+    
 
 class User(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
