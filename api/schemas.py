@@ -1,21 +1,7 @@
+from typing import List, Optional
 from bson import ObjectId
 from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
-
-# class PyObjectId(ObjectId):
-#     @classmethod
-#     def __get_validators__(cls):
-#         yield cls.validate
-
-#     @classmethod
-#     def validate(cls, v):
-#         if not ObjectId.is_valid(v):
-#             raise ValueError("Invalid ObjectID")
-#         return ObjectId(v)
-
-#     @classmethod
-#     def __modify_schema__(cls, field_schema):
-#         field_schema.update(type="string")
 
 class PyObjectId(ObjectId):
     @classmethod
@@ -94,10 +80,8 @@ class PostContent(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     user_email: str = None
     post_owner: str = None
-    title: str
     content: str
     media_url: str
-    is_published: bool = True
     creation_date: datetime = Field(default_factory=datetime.now)
 
     class Config:
@@ -105,21 +89,17 @@ class PostContent(BaseModel):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "title": "It's a brigth day",
                 "content": "enter more details here",
-                "media_url": "",
-                "is_published": True
+                "media_url": ""
             }
         }
 
 class PostContentResponse(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     user_email: str = None
-    post_owner: str =None
-    title: str
+    post_owner: str = None
     content: str
     media_url: str
-    is_published: bool = True
     creation_date: datetime = Field(default_factory=datetime.now)
 
     class Config:
@@ -127,14 +107,22 @@ class PostContentResponse(BaseModel):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "title": "It's a brigth day",
                 "content": "enter more details here",
-                "media_url": "",
-                "is_published": True
+                "media_url": ""
             }
         }
+
+class PaginationData(BaseModel):
+    total_posts: int
+    total_pages: int
+    current_page: int
+    next_url: Optional[str]
+    prev_url: Optional[str]
+    post_content: List[PostContent]  
 
 class LoginRequest(BaseModel):
     email: str
     password: str
 
+class ErrorResponse(BaseModel):
+    detail: str
